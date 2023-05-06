@@ -6,6 +6,7 @@ python3 marked_words.py ../generated_personas.csv --target_val 'an Asian' F --ta
 """
 
 import pandas as pd
+import numpy as np
 from collections import Counter
 import argparse
 from collections import defaultdict
@@ -85,9 +86,9 @@ def marked_words(df, target_val, target_col, unmarked_val,verbose=False):
         c2 = []
         for k,v in delt.items():
             if v > thr:
-                c1.append(k)
+                c1.append([k,v])
             elif v < -thr:
-                c2.append(k)
+                c2.append([k,v])
 
         if 'target' in grams:
             grams['target'].extend(c1)
@@ -102,9 +103,10 @@ def marked_words(df, target_val, target_col, unmarked_val,verbose=False):
     for r in grams.keys():
         temp = []
         thr = len(unmarked_val) # must satisfy all intersections
-        for k,v in Counter(grams[r]).most_common():
+        for k,v in Counter([word for word, z in grams[r]]).most_common():
             if v >= thr:
-                temp.append(k)
+                z_score_sum = np.sum([z for word, z in grams[r] if word == k])
+                temp.append([k, z_score_sum])
 
         grams_refine[r] = temp
     return grams_refine['target']
