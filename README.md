@@ -3,7 +3,7 @@
 This repository contains the code and data associated with the ACL 2023 paper, Marked Personas: Using Natural Language Prompts to Measure Stereotypes in Language Models. Please contact Myra Cheng (myra@cs.stanford.edu) if you have any questions or concerns!
 
 ## Code
-Example scripts to generate personas using the OpenAI API are provided in the `generate_personas` folder. Then, to use Marked Words, the main script is `marked_words.py`. 
+Example scripts to generate personas using the OpenAI API are provided in the `persona_generation_scripts` folder. Then, to use Marked Words, the main script is `marked_words.py`. 
 Example usage can be found in `reproduce_main_results_*.ipynb` which reproduces the figures, tables, and results of the paper for different models. `reproduce_appendix.ipynb` reproduces further results found in the appendix. 
 
 ## Data
