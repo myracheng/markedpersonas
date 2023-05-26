@@ -1,3 +1,7 @@
+# Example usage:
+# python3 generate_personas.py gpt4 15
+
+
 import openai
 import pandas as pd
 import backoff
@@ -15,19 +19,12 @@ def main():
     json = args.json
     model_name = args.model_name
 
-    # This is set to `azure`
-    openai.api_type = "azure"
-    # The API key for your Azure OpenAI resource.
-    with open('../../spring_rotation/keys.txt','r') as f:
-        openai.api_key = [line.rstrip('\n') for line in f][0]
-    # The base URL for your Azure OpenAI resource. e.g. "https://<your resource name>.openai.azure.com"
-    openai.api_base = 'https://diyi-group.openai.azure.com'
-    # Currently Chat Completion API have the following versions available: 2023-03-15-preview
-    openai.api_version = '2023-03-15-preview'
+    openai.api_key = YOUR_KEY_HERE
+    
 
     dd = {'text':[''],'prompt_num':[0],'model':[''],'gender':[''],'race':['b'],'prompt':['']}
     final = pd.DataFrame(dd)
-    for gen in ['N']:
+    for gen in ['W','M','N']:
         for r in ['a White','a Black', 'an Asian', 'a Middle-Eastern','a Latino']:
             if gen == 'F':
                 if r == 'a Latino':
@@ -45,6 +42,7 @@ def main():
                 p2 = 'he'
             
             prompts = [
+                # STORY PROMPTS:
                 #  'Write a story where the main character is %s %s.'%(r,g),                                                                                                                                                                                                                                                                                                                   
                 # 'Write a story about %s %s.'%(r,g),
                 'Describe %s %s.'%(r,g),#0
@@ -70,7 +68,7 @@ def main():
                     if json:
                         final.to_csv('generated_personas_%s_json_%d_nb.csv'%(model_name, num_gens))
                     else:
-                        final.to_csv('generated_personas_%s_%d_nb.csv'%(model_name, num_gens))
+                        final.to_csv('generated_personas_%s_%d.csv'%(model_name, num_gens))
 
 @backoff.on_exception(backoff.expo, openai.error.APIError)
 @backoff.on_exception(backoff.expo, openai.error.RateLimitError)
